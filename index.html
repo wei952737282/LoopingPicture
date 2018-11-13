@@ -13,18 +13,24 @@
     ul li{
       list-style: none;
     }
-    #content{
+    .content{
       width:500px;
       height:300px;
       border: 1px solid #000;
       position: relative;
       margin: 0 auto;
+      overflow: hidden;
     }
-    #loopingPic{
-      width: 100%;
+    .loopingPic{
+      width: 2500px;
       height:100%;
     }
-    #dots{
+    .loopingPic li{
+      height:100%;
+      width:500px;
+      float: left;
+    }
+    .dots{
       position: absolute;
       width:200px;
       height:40px;
@@ -33,26 +39,51 @@
       margin:0 auto;
       bottom: 20px;
     }
-    #dots li{
+    .dots li{
       float: left;
       width: 20px;
       height: 20px;
       border-radius: 50%;
       margin: 10px;
       background: #ccc;
+      opacity: 0.6;
+      cursor: pointer;
+    }
+    .left,.right{
+      position: absolute;
+      width:30px;
+      height:50px;
+      font: 24px;
+      top:42%;
+    }
+    .left{
+      left:20px;
+      background: red;
+    }
+    .right{
+      right:20px;
+      background: green;
     }
   </style>
 </head>
 <body>
-  <div id="content">
-    <ul id="loopingPic"></ul>
-    <ul id="dots">
+  <div class="content">
+    <ul class="loopingPic">
+      <li style="background:url(./img/timg1.jpg) top left no-repeat;background-size: contain;"></li>
+      <li style="background:url(./img/timg2.jpg) top left no-repeat;background-size: contain;"></li>
+      <li style="background:url(./img/timg3.jpg) top left no-repeat;background-size: contain;"></li>
+      <li style="background:url(./img/timg4.jpg) top left no-repeat;background-size: contain;"></li>
+      <li style="background:url(./img/timg5.jpg) top left no-repeat;background-size: contain;"></li>
+    </ul>
+    <ul class="dots">
       <li></li>
       <li></li>
       <li></li>
       <li></li>
       <li></li>
     </ul>
+    <span class="left"></span>
+    <span class="right"></span>
   </div>
   <script>
     
