@@ -24,6 +24,8 @@
     .loopingPic{
       width: 2500px;
       height:100%;
+      position: relative;
+      transition-duration: 500ms;
     }
     .loopingPic li{
       height:100%;
@@ -45,38 +47,44 @@
       height: 20px;
       border-radius: 50%;
       margin: 10px;
-      background: #ccc;
-      opacity: 0.6;
+      background:rgba(204, 204, 204, .6);
       cursor: pointer;
+    }
+    .dots li.active{
+      background: rgba(255, 255, 255, 1);
     }
     .left,.right{
       position: absolute;
       width:30px;
       height:50px;
-      font: 24px;
       top:42%;
     }
     .left{
       left:20px;
-      background: red;
+      background: url(./img/left.jpg) center center no-repeat;
+      background-size: contain;
     }
     .right{
       right:20px;
-      background: green;
+      background: url(./img/right.jpg) center center no-repeat;
+      background-size: contain;
     }
   </style>
+  <script src="./jquery.js"></script>
 </head>
 <body>
   <div class="content">
     <ul class="loopingPic">
-      <li style="background:url(./img/timg1.jpg) top left no-repeat;background-size: contain;"></li>
-      <li style="background:url(./img/timg2.jpg) top left no-repeat;background-size: contain;"></li>
-      <li style="background:url(./img/timg3.jpg) top left no-repeat;background-size: contain;"></li>
-      <li style="background:url(./img/timg4.jpg) top left no-repeat;background-size: contain;"></li>
-      <li style="background:url(./img/timg5.jpg) top left no-repeat;background-size: contain;"></li>
+      <li style="background:url(./img/timg5.jpg) top left no-repeat;background-size: contain;">1</li>
+      <li style="background:url(./img/timg1.jpg) top left no-repeat;background-size: contain;">2</li>
+      <li style="background:url(./img/timg2.jpg) top left no-repeat;background-size: contain;">3</li>
+      <li style="background:url(./img/timg3.jpg) top left no-repeat;background-size: contain;">4</li>
+      <li style="background:url(./img/timg4.jpg) top left no-repeat;background-size: contain;">5</li>
+      <li style="background:url(./img/timg5.jpg) top left no-repeat;background-size: contain;">6</li>
+      <li style="background:url(./img/timg1.jpg) top left no-repeat;background-size: contain;">7</li>
     </ul>
     <ul class="dots">
-      <li></li>
+      <li class="active"></li>
       <li></li>
       <li></li>
       <li></li>
@@ -86,7 +94,28 @@
     <span class="right"></span>
   </div>
   <script>
-    
+    function loop(){
+      var index = 0;
+      var itemWidth = $(".loopingPic li").width();
+      var itemLength = $(".loopingPic li").length;
+      $(".loopingPic").css('width', itemWidth*itemLength+'px')
+      
+      this.aaa =function(i){
+        if(i == $(".loopingPic li").length-1){
+          $(".loopingPic").css({'transition-duration':'0ms','transform':'translate3d(0,0,0)'})
+          i = 1;
+          index = 1;
+        }
+        var left = -i * $(".loopingPic li").width();
+        $(".loopingPic").css({'transform':'translate3d('+ left +'px,0,0)','transition-duration':'500ms'})
+      }
+      var timer = setInterval(function(){
+        index++;
+        this.aaa(index);
+      },1500)
+
+    }
+    loop();
   </script>
 </body>
 </html>
