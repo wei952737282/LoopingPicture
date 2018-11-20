@@ -79,13 +79,11 @@
 <body>
   <div class="content1 content">
     <ul class="loopingPic">
-      <li class="loopItem"><img src="./img/timg5.jpg" alt=""></li>
       <li class="loopItem"><img src="./img/timg1.jpg" alt=""></li>
       <li class="loopItem"><img src="./img/timg2.jpg" alt=""></li>
       <li class="loopItem"><img src="./img/timg3.jpg" alt=""></li>
       <li class="loopItem"><img src="./img/timg4.jpg" alt=""></li>
       <li class="loopItem"><img src="./img/timg5.jpg" alt=""></li>
-      <li class="loopItem"><img src="./img/timg1.jpg" alt=""></li>
     </ul>
     <ul class="dots">
       <li></li>
@@ -118,134 +116,87 @@
     <span class="right"></span>
   </div> -->
   <script>
-      // var index = 1;
-      // var itemWidth = $(".loopingPic .loopItem").width();
-      // var itemLength = $(".loopingPic .loopItem").length;
-      // var timer;
-      // $(".loopingPic").css({'width':itemWidth*itemLength+'px','transition-duration':'0ms','transform':'translate3d(-'+index*itemWidth+'px,0,0)'})
-      // $(".dots li").eq(index-1).addClass('active').siblings().removeClass('active');
-      // var aaa =function(i){
-      //   if(i == itemLength-1){
-      //     $(".loopingPic").css({'transform':'translate3d(0,0,0)','transition-duration':'0ms'})
-      //     i = 1;
-      //     index = 1;
-      //   }else if(i == 0){
-      //     $(".loopingPic").css({'transform':'translate3d(-'+(itemLength-1)*itemWidth+'px,0,0)','transition-duration':'0ms'})
-      //     i = itemLength-2;
-      //     index = itemLength-2;
-      //   }
-      //   var left = -i * $(".loopingPic .loopItem").width();
-      //   $(".loopingPic").css({'transform':'translate3d('+ left +'px,0,0)','transition-duration':'500ms'})   
-      //   $(".dots li").eq(index-1).addClass('active').siblings().removeClass('active')  
-      // }
-      // function setTimer(){
-      //   timer = setInterval(function(){
-      //     index++;
-      //     aaa(index);
-      //   },1500)
-      // }
-      // $('.left').click(function(){
-      //   clearInterval(timer);
-      //   index--;
-      //   aaa(index);
-      //   setTimer()
-      // })
-      // $('.right').click(function(){
-      //   clearInterval(timer);
-      //   index++;
-      //   aaa(index);
-      //   setTimer()
-      // })
-      // $(".dots li").click(function(){
-      //   clearInterval(timer);
-      //   let prevIndex = index;
-      //   let nextIndex = $(this).index()+1;
-      //   if(prevIndex == itemLength-2 && nextIndex == 1){
-      //     index = itemLength-1;
-      //   }else if(prevIndex == 1 && nextIndex == itemLength-2){
-      //     index = 0;
-      //   }else{
-      //     index = nextIndex;
-      //   }
-      //   aaa(index)
-      //   setTimer();
-      // })
-      // setTimer();
-      function Loop(className,config){
+      var index = 1;
+      var that = $('.content1');
+      var loopingPic = that.find('.loopingPic');
+      let firstItem = loopingPic.find('li:first').clone();
+      let lastItem = loopingPic.find('li:last').clone();
+      console.log(loopingPic)
+      loopingPic.append(firstItem);
+      loopingPic.prepend(lastItem);
+      var itemWidth = $(".loopingPic .loopItem").width();
+      var itemLength = $(".loopingPic .loopItem").length;
+      var timer;
+      $(".loopingPic").css({'width':itemWidth*itemLength+'px','transition-duration':'0ms','transform':'translate3d(-'+index*itemWidth+'px,0,0)'})
+      $(".dots li").eq(index-1).addClass('active').siblings().removeClass('active');
+      var aaa =function(i){
+        if(i == itemLength-1){
+          $(".loopingPic").css({'transform':'translate3d(0,0,0)','transition-duration':'0ms'})
+          i = 1;
+          index = 1;
+        }else if(i == 0){
+          $(".loopingPic").css({'transform':'translate3d(-'+(itemLength-1)*itemWidth+'px,0,0)','transition-duration':'0ms'})
+          i = itemLength-2;
+          index = itemLength-2;
+        }
+        var left = -i * $(".loopingPic .loopItem").width();
+        $(".loopingPic").css({'transform':'translate3d('+ left +'px,0,0)','transition-duration':'500ms'})   
+        $(".dots li").eq(index-1).addClass('active').siblings().removeClass('active')  
+      }
+      function setTimer(){
+        timer = setInterval(function(){
+          index++;
+          aaa(index);
+        },1500)
+      }
+      $('.left').click(function(){
+        clearInterval(timer);
+        index--;
+        aaa(index);
+        setTimer()
+      })
+      $('.right').click(function(){
+        clearInterval(timer);
+        index++;
+        aaa(index);
+        setTimer()
+      })
+      $(".dots li").click(function(){
+        clearInterval(timer);
+        let prevIndex = index;
+        let nextIndex = $(this).index()+1;
+        if(prevIndex == itemLength-2 && nextIndex == 1){
+          index = itemLength-1;
+        }else if(prevIndex == 1 && nextIndex == itemLength-2){
+          index = 0;
+        }else{
+          index = nextIndex;
+        }
+        aaa(index)
+        setTimer();
+      })
+      setTimer();
+      function Loop(className){
         let that = $(className);
-        let This = this;
-        that.index = config.index || 1;//首屏显示的索引
-        that.itemWidth = config.itemWidth || 500;
-        that.itemHeight = config.itemHeight || 300;
-        that.itemLength = that.find('.loopingPic .loopItem').length;
-        that.find('.left').click(function(that){
-          This.left(that);
-        });
-        that.find('.right').click(function(that){
-          This.right(that);
-        })
-        that.find(".dots li").click(function(that){
-          This.dotsClic(that);
-        })
-        This.setTimer();
+        let loopingPic = that.find('.loopingPic');
+        let firstItem = loopingPic.find('li:first').clone();
+        let lastItem = loopingPic.find('li:last').clone();
+        this.index = 1;
+        this.itemWidth = that.find(".loopingPic .loopItem").width();
+        this.itemLength = that.find(".loopingPic .loopItem").length;
+        
       }
       Loop.prototype = {
-        aaa:function(){
-          if(that.index == that.itemLength-1){
-            that.find(".loopingPic").css({'transform':'translate3d(0,0,0)','transition-duration':'0ms'})
-            that.index = 1;
-          }else if(i == 0){
-            that.find(".loopingPic").css({'transform':'translate3d(-'+(that.itemLength-1)*that.itemWidth+'px,0,0)','transition-duration':'0ms'})
-            that.index = that.itemLength-2;
-          }
-          var left = -that.index * that.find(".loopingPic .loopItem").width();
-          that.find(".loopingPic").css({'transform':'translate3d('+ left +'px,0,0)','transition-duration':'500ms'})   
-          that.find(".dots li").eq(that.index-1).addClass('active').siblings().removeClass('active') 
+        init:function(){
+
         },
-        timer:function(){},
-        setTimer:function(obj){
-          that.timer = setInterval(function(){
-            that.index++;
-            aaa(that.index);
-          },1500)
+        prep:function(){
+
         },
-        left:function(){
-          clearInterval(that.timer);
-          that.index--;
-          aaa(that.index);
-          setTimer()
-        },
-        right:function(){
-          clearInterval(that.timer);
-          that.index++;
-          aaa(that.index);
-          setTimer()
-        },
-        dotsClick:function(that){
-          clearInterval(that.timer);
-          let prevIndex = that.index;
-          let nextIndex = $(this).index()+1;
-          if(prevIndex == that.itemLength-2 && nextIndex == 1){
-            that.index = that.itemLength-1;
-          }else if(prevIndex == 1 && nextIndex == that.itemLength-2){
-            that.index = 0;
-          }else{
-            that.index = nextIndex;
-          }
-          aaa(that.index)
-          setTimer();
+        next:function(){
+
         }
       }
-      Loop('.content1',{
-        index:1,
-        width:500,
-        height:300
-      });
-      Loop('.content2',{
-        index:1,
-        width:500,
-        height:300
-      });
   </script>
 </body>
 </html>
