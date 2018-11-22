@@ -116,87 +116,136 @@
     <span class="right"></span>
   </div> -->
   <script>
-      var index = 1;
-      var that = $('.content1');
-      var loopingPic = that.find('.loopingPic');
-      let firstItem = loopingPic.find('li:first').clone();
-      let lastItem = loopingPic.find('li:last').clone();
-      console.log(loopingPic)
-      loopingPic.append(firstItem);
-      loopingPic.prepend(lastItem);
-      var itemWidth = $(".loopingPic .loopItem").width();
-      var itemLength = $(".loopingPic .loopItem").length;
-      var timer;
-      $(".loopingPic").css({'width':itemWidth*itemLength+'px','transition-duration':'0ms','transform':'translate3d(-'+index*itemWidth+'px,0,0)'})
-      $(".dots li").eq(index-1).addClass('active').siblings().removeClass('active');
-      var aaa =function(i){
-        if(i == itemLength-1){
-          $(".loopingPic").css({'transform':'translate3d(0,0,0)','transition-duration':'0ms'})
-          i = 1;
-          index = 1;
-        }else if(i == 0){
-          $(".loopingPic").css({'transform':'translate3d(-'+(itemLength-1)*itemWidth+'px,0,0)','transition-duration':'0ms'})
-          i = itemLength-2;
-          index = itemLength-2;
-        }
-        var left = -i * $(".loopingPic .loopItem").width();
-        $(".loopingPic").css({'transform':'translate3d('+ left +'px,0,0)','transition-duration':'500ms'})   
-        $(".dots li").eq(index-1).addClass('active').siblings().removeClass('active')  
-      }
-      function setTimer(){
-        timer = setInterval(function(){
-          index++;
-          aaa(index);
-        },1500)
-      }
-      $('.left').click(function(){
-        clearInterval(timer);
-        index--;
-        aaa(index);
-        setTimer()
-      })
-      $('.right').click(function(){
-        clearInterval(timer);
-        index++;
-        aaa(index);
-        setTimer()
-      })
-      $(".dots li").click(function(){
-        clearInterval(timer);
-        let prevIndex = index;
-        let nextIndex = $(this).index()+1;
-        if(prevIndex == itemLength-2 && nextIndex == 1){
-          index = itemLength-1;
-        }else if(prevIndex == 1 && nextIndex == itemLength-2){
-          index = 0;
-        }else{
-          index = nextIndex;
-        }
-        aaa(index)
-        setTimer();
-      })
-      setTimer();
+      // var index = 1;
+      // var that = $('.content1');
+      // var loopingPic = that.find('.loopingPic');
+      // let firstItem = loopingPic.find('li:first').clone();
+      // let lastItem = loopingPic.find('li:last').clone();
+      // console.log(loopingPic)
+      // loopingPic.append(firstItem);
+      // loopingPic.prepend(lastItem);
+      // var itemWidth = $(".loopingPic .loopItem").width();
+      // var itemLength = $(".loopingPic .loopItem").length;
+      // var timer;
+      // $(".loopingPic").css({'width':itemWidth*itemLength+'px','transition-duration':'0ms','transform':'translate3d(-'+index*itemWidth+'px,0,0)'})
+      // $(".dots li").eq(index-1).addClass('active').siblings().removeClass('active');
+      // var aaa =function(i){
+      //   if(i == itemLength-1){
+      //     $(".loopingPic").css({'transform':'translate3d(0,0,0)','transition-duration':'0ms'})
+      //     i = 1;
+      //     index = 1;
+      //   }else if(i == 0){
+      //     $(".loopingPic").css({'transform':'translate3d(-'+(itemLength-1)*itemWidth+'px,0,0)','transition-duration':'0ms'})
+      //     i = itemLength-2;
+      //     index = itemLength-2;
+      //   }
+      //   var left = -i * $(".loopingPic .loopItem").width();
+      //   $(".loopingPic").css({'transform':'translate3d('+ left +'px,0,0)','transition-duration':'500ms'})   
+      //   $(".dots li").eq(index-1).addClass('active').siblings().removeClass('active')  
+      // }
+      // function setTimer(){
+      //   timer = setInterval(function(){
+      //     index++;
+      //     aaa(index);
+      //   },1500)
+      // }
+      // $('.left').click(function(){
+      //   clearInterval(timer);
+      //   index--;
+      //   aaa(index);
+      //   setTimer()
+      // })
+      // $('.right').click(function(){
+      //   clearInterval(timer);
+      //   index++;
+      //   aaa(index);
+      //   setTimer()
+      // })
+      // $(".dots li").click(function(){
+      //   clearInterval(timer);
+      //   let prevIndex = index;
+      //   let nextIndex = $(this).index()+1;
+      //   if(prevIndex == itemLength-2 && nextIndex == 1){
+      //     index = itemLength-1;
+      //   }else if(prevIndex == 1 && nextIndex == itemLength-2){
+      //     index = 0;
+      //   }else{
+      //     index = nextIndex;
+      //   }
+      //   aaa(index)
+      //   setTimer();
+      // })
+      // setTimer();
       function Loop(className){
-        let that = $(className);
-        let loopingPic = that.find('.loopingPic');
-        let firstItem = loopingPic.find('li:first').clone();
-        let lastItem = loopingPic.find('li:last').clone();
         this.index = 1;
-        this.itemWidth = that.find(".loopingPic .loopItem").width();
-        this.itemLength = that.find(".loopingPic .loopItem").length;
-        
+        this.init.bind(this)(className);
+        this.move();
+        this.left.bind('click',this.prev.bind(this));
+        this.right.bind('click',this.next.bind(this));
+        this.dotsLi.bind('click',this.dotsLiClick.bind(this));
       }
       Loop.prototype = {
-        init:function(){
-
+        init:function(className){
+          var  that = $(className);
+          this.loopingPic = that.find('.loopingPic');
+          this.dotsLi = that.find(".dots li");
+          this.left = that.find('.left');
+          this.right = that.find('.right');
+          let firstItem = this.loopingPic.find('li:first').clone();
+          let lastItem = this.loopingPic.find('li:last').clone();
+          this.loopingPic.append(firstItem);
+          this.loopingPic.prepend(lastItem);
+          this.itemWidth = that.find(".loopingPic .loopItem").width();
+          this.itemLength = that.find(".loopingPic .loopItem").length;
+          this.setTimer();
         },
-        prep:function(){
-
+        move:function(){
+          if(this.index == this.itemLength-1){
+            this.loopingPic.css({'transform':'translate3d(0,0,0)','transition-duration':'0ms'})
+            this.index
+          }else if(this.index == 0){
+            this.loopingPic.css({'transform':'translate3d(-'+(this.itemLength-1)*this.itemWidth+'px,0,0)','transition-duration':'0ms'})
+            this.index = this.itemLength-2;
+          }
+          var left = -this.index * this.itemWidth;
+          this.loopingPic.css({'transform':'translate3d('+ left +'px,0,0)','transition-duration':'500ms'})   
+          this.dotsLi.eq(this.index-1).addClass('active').siblings().removeClass('active');
+        },
+        prev:function(){
+          clearInterval(this.timer);
+          this.index--;
+          this.move();
+          this.setTimer();
         },
         next:function(){
-
+          clearInterval(this.timer);
+          this.index++;
+          this.move();
+          this.setTimer();
+        },
+        timer:function(){},
+        setTimer:function(){
+          this.timer = setInterval(function(){
+            this.index++;
+            this.move(this.index);
+          }.bind(this),1500)
+        },
+        dotsLiClick:function(){
+          clearInterval(this.timer);
+          let prevIndex = this.index;
+          let nextIndex = $(this).index()+1;
+          if(prevIndex == this.itemLength-2 && this.nextIndex == 1){
+            this.index = this.itemLength-1;
+          }else if(prevIndex == 1 && nextIndex == this.itemLength-2){
+            this.index = 0;
+          }else{
+            this.index = nextIndex;
+          }
+          this.move()
+          this.setTimer();
         }
       }
+      var loop1 = new Loop('.content1')
   </script>
 </body>
 </html>
